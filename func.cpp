@@ -16,6 +16,10 @@ int circle::getRadius()
 {
     return radius;
 }
+Vector2 circle::getVelocity()
+{
+    return velocity;
+}
 void circle::changePosition(Vector2 vector)
 {
     position.x+=vector.x;
@@ -25,6 +29,13 @@ void circle::changeRadius(float ammount)
 {
     radius+=ammount;
 }
+void circle::changeVelocity(Vector2 acceleration)
+{   
+   
+    velocity.x+=acceleration.x;
+    velocity.y+=acceleration.y;
+}
+
 
 
 
