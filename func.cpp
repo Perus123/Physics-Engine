@@ -24,6 +24,7 @@ void circle::changePosition(Vector2 vector)
 {
     position.x+=vector.x;
     position.y+=vector.y;
+   
 }
 void circle::changeRadius(float ammount)
 {
@@ -34,7 +35,20 @@ void circle::changeVelocity(Vector2 acceleration)
    
     velocity.x+=acceleration.x;
     velocity.y+=acceleration.y;
+    velocity.x*=friction;
+    velocity.y*=friction;
 }
+
+line::line(Vector2 a, Vector2 b)
+{
+    firstPoint=a;
+    secondPoint=b;
+    lineVector=Vector2Subtract(a,b);
+    normal=Vector2Normalize(lineVector);
+}
+
+    
+
 
 
 

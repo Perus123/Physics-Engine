@@ -3,7 +3,12 @@
 #define FUNC_H
 #include <iostream>
 #include <raylib.h>
+#include <raymath.h>
 
+ ///Physics constants
+      const float friction=0.99;
+      const float restitution=0.9;
+      const Vector2 gravity= {0.0f, 9.8f};
 class circle {
       Vector2 position; 
       Vector2 velocity={0.0f, 0.0f};
@@ -18,4 +23,12 @@ class circle {
       void changeVelocity(Vector2 acceleration);
       
 };
-#endif 
+class line{ 
+      public:
+      Vector2 firstPoint, secondPoint;
+      Vector2 lineVector;
+      Vector2 normal;
+      line(Vector2 a, Vector2 b);
+};
+
+#endif
