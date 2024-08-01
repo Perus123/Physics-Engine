@@ -6,7 +6,7 @@
 #include <raymath.h>
 
  ///Physics constants
-      const float friction=0.99;
+      const float friction=1;
       const float restitution=0.9;
       const Vector2 gravity= {0.0f, 9.8f};
 class circle {
@@ -21,6 +21,7 @@ class circle {
       void changeRadius(float ammount);
       Vector2 getVelocity();
       void changeVelocity(Vector2 acceleration);
+      void setPosition(Vector2 pos);
       
 };
 class line{ 

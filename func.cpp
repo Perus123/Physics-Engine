@@ -38,12 +38,18 @@ void circle::changeVelocity(Vector2 acceleration)
     velocity.x*=friction;
     velocity.y*=friction;
 }
+void circle::setPosition(Vector2 pos)
+{
+    position.x=pos.x;
+    position.y=pos.y;
+}
 
 line::line(Vector2 a, Vector2 b)
 {
     firstPoint=a;
     secondPoint=b;
     lineVector=Vector2Subtract(a,b);
+    lineVector={-lineVector.y, lineVector.x};
     normal=Vector2Normalize(lineVector);
 }
 
