@@ -1,26 +1,5 @@
-# Raylib C++ Starter Template
-
-Raylib C++ Starter Template for Visual Studio Code on Windows.
-
-This demo project contains a bouncing ball raylib example program.
-
-It works with raylib version 4.5.
-Tested on both Windows 10 and Windows 11.
-
-# Video Tutorial
-
-<p align="center">
-  <img src="preview.jpg" alt="" width="800">
-</p>
-
-<p align="center">
-🎥 <a href="https://www.youtube.com/watch?v=PaAcVk5jUd8">Video Tutorial on YouTube</a>
-</p>
-
-<br>
-<br>
-<p align="center">
-| 📺 <a href="https://www.youtube.com/channel/UC3ivOTE5EgpmF2DHLBmWIWg">My YouTube Channel</a>
-| 🌍 <a href="http://www.educ8s.tv">My Website</a> | <br>
-</p>
-
+#Physics Simulator
+This app is a 2D physics mechanics simulator. Its purpose is to show the various properties of objects in space, and their collisions with lines or other spheres.
+Currently the only objects used are spheres. I am looking forward to improve my applied algorightmic skills to introduce regular polygons, and if possible to my abilities, convex hulls drawn by user.
+Feel free to explore, I will provide documentation for my classes and methods.
+I am using the Raylib framework, along with Raymath for cleaner code. 
