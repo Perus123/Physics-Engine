@@ -8,8 +8,12 @@
 
 /// Physics constants
 const float friction = 1;
-const float restitution = 0.8;
-const Vector2 gravity = {0.0f, 5.0f};
+const float restitution = 1;
+const Vector2 gravity = {0.0f, 9.8f};
+/// Rendering constans
+const float perFrame = 1.0/60;
+
+
 class circle
 {
       Vector2 position;
@@ -17,6 +21,7 @@ class circle
       float radius, weight;
 
 public:
+      int subStep;
       circle(Vector2 start, float rad);
       Vector2 getPosition();
       void changePosition(Vector2 vector);
@@ -30,7 +35,7 @@ class line
 {
 public:
       Vector2 firstPoint, secondPoint;
-      Vector2 lineVector;
+      Vector2 lineVector, lineDirection;
       Vector2 normal;
       line(Vector2 a, Vector2 b);
 };

@@ -7,6 +7,7 @@ circle::circle(Vector2 start, float rad)
     position.y = start.y;
     radius = rad;
     weight = radius * radius * 3.14f;
+    subStep=0;
 }
 Vector2 circle::getPosition()
 {
@@ -48,6 +49,7 @@ line::line(Vector2 a, Vector2 b)
     firstPoint = a;
     secondPoint = b;
     lineVector = Vector2Subtract(a, b);
+    lineDirection= lineVector;
     lineVector = {-lineVector.y, lineVector.x};
     normal = Vector2Normalize(lineVector);
 }
