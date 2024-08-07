@@ -8,64 +8,75 @@ int main()
     InitWindow(screenWidth, screenHeight, "Physics simulator - Gravity");
     char *message = {"Lets get this bread"};
     /// Objects initialization
-    std::vector<circle> circles;
-    std::vector<line> lines;
-    Vector2 initCircle = {100.f, 100.0f};
+    std::vector<circle> circleArray;
+    std::vector<line> lineArray;
 
+    Vector2 initCircle = {100.f, 100.0f};
     circle c(initCircle, 20);
     initCircle = {130.0f, 100.0f};
     circle c2(initCircle, 20);
-    circles.push_back(c);
-    circles.push_back(c2);
+    circleArray.push_back(c);
+    circleArray.push_back(c2);
+
     line l((Vector2){0, 600}, (Vector2){1600, 650}),
-         l2((Vector2){1600,650},(Vector2){800,0}),
-         l3((Vector2){800,0},(Vector2){0,600});
-    lines.push_back(l);
-    lines.push_back(l2);
-    lines.push_back(l3);
-    std::cout << l.normal.x << " " << l.normal.y << '\n';
+        l2((Vector2){1600, 650}, (Vector2){800, 0}),
+        l3((Vector2){800, 0},(Vector2){0, 600});
+    lineArray.push_back(l);
+    lineArray.push_back(l2);
+    lineArray.push_back(l3);
+    
 
     SetTargetFPS(60);
     while (WindowShouldClose() == false)
     {
 
-        for (int i = 0; i < circles.size(); i++)
+        for (int i = 0; i < circleArray.size(); i++)
         {
-            Vector2 cValues = circles[i].getPosition();
-            Vector2 circleToLine = Vector2Subtract(circles[i].getPosition(), l.firstPoint);
-            float dis = Vector2DotProduct(circleToLine, l.normal);
-            if (abs(dis) <= circles[i].getRadius())
-            {
-                Vector2 penetration = Vector2Scale(l.normal, circles[i].getRadius() - abs(dis));
 
-                float value = -2 * Vector2DotProduct(l.normal, circles[i].getVelocity()) * restitution;
-                circles[i].changeVelocity(Vector2Scale(l.normal, value));
-                circles[i].changePosition(penetration);
-                circles[i].changePosition(circles[i].getVelocity());
-                std::cout << dis << '\n';
-            }
-            else if (cValues.y < screenHeight - circles[i].getRadius() && cValues.x < screenWidth)
+            for (int j = 0; j < lineArray.size(); j++)
             {
-                circles[i].changeVelocity(Vector2Scale(gravity, 0.01f));
-                circles[i].changePosition(circles[i].getVelocity());
-            }
+                Vector2 cValues = circleArray[i].getPosition();
+                Vector2 circleToLine = Vector2Subtract(circleArray[i].getPosition(), lineArray[j].firstPoint);
+                float dis = Vector2DotProduct(circleToLine, lineArray[j].normal);
+                if (abs(dis) <= circleArray[i].getRadius())
+                {
+                    Vector2 penetration = Vector2Scale(lineArray[j].normal, circleArray[i].getRadius() - abs(dis));
+                    float value = -2 * Vector2DotProduct(lineArray[j].normal, circleArray[i].getVelocity()) * restitution;
+                    circleArray[i].changeVelocity(Vector2Scale(lineArray[j].normal, value));
+                    circleArray[i].changePosition(penetration);
+                    circleArray[i].changePosition(circleArray[i].getVelocity());
+                    std::cout << dis << '\n';
+                }
+                else if (cValues.y < screenHeight - circleArray[i].getRadius() && cValues.x < screenWidth)
+                {
+                    circleArray[i].changeVelocity(Vector2Scale(gravity, 0.01f));
+                    circleArray[i].changePosition(circleArray[i].getVelocity());
+                }
 
-            else if (cValues.x > screenWidth)
-            {
-                /// Vector2 finalPosition=c.getPosition();
-                /// std::cout<<finalPosition.x<<" "<<finalPosition.y<<" ";
-                circles[i].setPosition({0.0f, (float)600 - circles[i].getRadius()});
+                else if (cValues.x > screenWidth)
+                {
+                    /// Vector2 finalPosition=c.getPosition();
+                    /// std::cout<<finalPosition.x<<" "<<finalPosition.y<<" ";
+                    circleArray[i].setPosition({0.0f, (float)600 - circleArray[i].getRadius()});
+                }
             }
         }
 
         BeginDrawing(); /// start draw
         ClearBackground(BLACK);
         DrawText(message, 390, 400, 50, LIGHTGRAY);
-        DrawLine(0, 600, 1600, 650, BLUE);
-        for (int i = 0; i < circles.size(); i++)
+        
+        for (int i = 0; i < circleArray.size(); i++)
         {
-            Vector2 position = circles[i].getPosition();
-            DrawCircle(position.x, position.y, circles[i].getRadius(), MAROON);
+            Vector2 position = circleArray[i].getPosition();
+            DrawCircle(position.x, position.y, circleArray[i].getRadius(), MAROON);
+        }
+        for (int j = 0; j < lineArray.size(); j++)
+        {
+            Vector2 start, finish;
+            start = lineArray[j].firstPoint;
+            finish = lineArray[j].secondPoint;
+            DrawLine(start.x , start.y, finish.x, finish.y, BLUE);
         }
         EndDrawing(); /// stop draw
     }

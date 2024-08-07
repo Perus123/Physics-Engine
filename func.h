@@ -7,9 +7,9 @@
 #include <vector>
 
 /// Physics constants
-const float friction = 0.999;
+const float friction = 1;
 const float restitution = 0.8;
-const Vector2 gravity = {0.0f, 20.0f};
+const Vector2 gravity = {0.0f, 5.0f};
 class circle
 {
       Vector2 position;
