@@ -43,32 +43,16 @@ int main()
             {
                 for (int j = 0; j < lineArray.size(); j++)
                 {
-                    /// circle position
-                    Vector2 circlePosition = circleArray[i].getPosition();
                     /// circle to line vector, for calculating distance
                     Vector2 circleToLine = Vector2Subtract(circleArray[i].getPosition(), lineArray[j].firstPoint);
                     float distance = Vector2DotProduct(circleToLine, lineArray[j].normal);
 
-                    if (abs(distance) <= circleArray[i].getRadius())
-                    {
-                        Vector2 penetration = Vector2Scale(lineArray[j].normal, circleArray[i].getRadius() - abs(distance));
-                        float value = -2 * Vector2DotProduct(lineArray[j].normal, circleArray[i].getVelocity()) * restitution;
-                        if (distance < 0)
-                        {
-                            penetration.x = -penetration.x;
-                            penetration.y = -penetration.y;
-                        }
-                        circleArray[i].changeVelocity(Vector2Scale(lineArray[j].normal, value));
-
-                        circleArray[i].changePosition(penetration);
-                        circleArray[i].changePosition(Vector2Scale(circleArray[i].getVelocity(), perFrame*subStepMultiplier));
-                     
+                    if (abs(distance) <= circleArray[i].getRadius()) {
+                        circleArray[i].handleCollision(lineArray[j], distance);
+                        circleArray[i].continueMovement(subStepMultiplier);
                     }
-                    else 
-                    {
-
-                        circleArray[i].changeVelocity(Vector2Scale(gravity, perFrame));
-                        circleArray[i].changePosition(Vector2Scale(circleArray[i].getVelocity(), perFrame*subStepMultiplier));
+                    else {
+                        circleArray[i].continueMovement(subStepMultiplier);
                     }
                 }
 

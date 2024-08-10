@@ -32,7 +32,18 @@ void circle::setPosition(Vector2 pos){
     position.y = pos.y;
 }
 void circle::handleCollision(line hitLine, float distance){
-   ;
+
+        Vector2 penetration = Vector2Scale(hitLine.normal, radius - abs(distance));
+        float value = -2 * Vector2DotProduct(hitLine.normal, velocity) * restitution;
+        if (distance < 0)
+            penetration=Vector2Scale(penetration,-1);
+                        
+        changeVelocity(Vector2Scale(hitLine.normal, value));
+        changePosition(penetration);
+}
+void circle::continueMovement(float stepMultiplier){
+    changeVelocity(Vector2Scale(gravity, perFrame));
+    changePosition(Vector2Scale(getVelocity(), perFrame*stepMultiplier));
 }
 
 line::line(Vector2 a, Vector2 b)

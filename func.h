@@ -14,6 +14,14 @@ const Vector2 gravity = {0.0f, 60.0f};
 const float perFrame = 1.0/60;
 
 
+class line
+{
+public:
+      Vector2 firstPoint, secondPoint;
+      Vector2 lineVector, lineDirection;
+      Vector2 normal;
+      line(Vector2 a, Vector2 b);
+};
 class circle
 {
       Vector2 position;
@@ -31,14 +39,8 @@ public:
       void changeVelocity(Vector2 acceleration);
       void setPosition(Vector2 pos);
       void handleCollision(line hitLine, float distance);
+      void continueMovement(float stepMultiplier);
 };
-class line
-{
-public:
-      Vector2 firstPoint, secondPoint;
-      Vector2 lineVector, lineDirection;
-      Vector2 normal;
-      line(Vector2 a, Vector2 b);
-};
+
 void calculateSubSteps(float speed, int& steps, float& multiplier);
 #endif
