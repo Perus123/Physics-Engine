@@ -7,7 +7,7 @@ int main()
     const int screenHeight = 900;
     InitWindow(screenWidth, screenHeight, "Physics simulator - Gravity");
     char *message = {"Lets get this bread"};
-        /// When velocity gets too big, there is a need for sub stepping
+    /// When velocity gets too big, there is a need for sub stepping
     int subStepCounter=1;
     float subStepMultiplier=1.0;
     /// Objects initialization
@@ -62,12 +62,12 @@ int main()
 
                         circleArray[i].changePosition(penetration);
                         circleArray[i].changePosition(Vector2Scale(circleArray[i].getVelocity(), perFrame*subStepMultiplier));
-                        std::cout << distance << '\n';
+                     
                     }
-                    else if (circlePosition.y < screenHeight - circleArray[i].getRadius() && circlePosition.x < screenWidth)
+                    else 
                     {
 
-                        circleArray[i].changeVelocity(Vector2Scale(gravity, float(1 / 60)));
+                        circleArray[i].changeVelocity(Vector2Scale(gravity, perFrame));
                         circleArray[i].changePosition(Vector2Scale(circleArray[i].getVelocity(), perFrame*subStepMultiplier));
                     }
                 }
@@ -75,13 +75,9 @@ int main()
                 if(speedMaximum<abs(circleArray[i].getVelocity().x)||speedMaximum<abs(circleArray[i].getVelocity().y))
                     speedMaximum=__max(abs(circleArray[i].getVelocity().x),abs(circleArray[i].getVelocity().y));
                 
-            } std::cout<<subStepCounter<<'\n';
+            } 
         }  
-        if(speedMaximum){
-        subStepCounter=speedMaximum/300+1;
-        subStepMultiplier=1.0/subStepCounter;
-        }
-       
+        calculateSubSteps(speedMaximum, subStepCounter, subStepMultiplier); /// Update sub steps after every iteration
         BeginDrawing(); /// start draw
         ClearBackground(BLACK);
         DrawText(message, 390, 400, 50, LIGHTGRAY);

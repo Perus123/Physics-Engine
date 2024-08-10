@@ -9,7 +9,7 @@
 /// Physics constants
 const float friction = 1;
 const float restitution = 1;
-const Vector2 gravity = {0.0f, 9.8f};
+const Vector2 gravity = {0.0f, 60.0f};
 /// Rendering constans
 const float perFrame = 1.0/60;
 
@@ -17,7 +17,7 @@ const float perFrame = 1.0/60;
 class circle
 {
       Vector2 position;
-      Vector2 velocity = {0.0f, 0.0f};
+      Vector2 velocity = {500.0f, 0.0f};
       float radius, weight;
 
 public:
@@ -39,5 +39,5 @@ public:
       Vector2 normal;
       line(Vector2 a, Vector2 b);
 };
-
+void calculateSubSteps(float speed, int& steps, float& multiplier);
 #endif

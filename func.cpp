@@ -53,3 +53,9 @@ line::line(Vector2 a, Vector2 b)
     lineVector = {-lineVector.y, lineVector.x};
     normal = Vector2Normalize(lineVector);
 }
+
+void calculateSubSteps(float speed, int& steps, float& multiplier)
+{
+    steps=speed/300+1;
+    multiplier=1.0/steps;
+}
