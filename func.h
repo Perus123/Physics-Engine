@@ -30,6 +30,7 @@ public:
       Vector2 getVelocity();
       void changeVelocity(Vector2 acceleration);
       void setPosition(Vector2 pos);
+      void handleCollision(line hitLine, float distance);
 };
 class line
 {
