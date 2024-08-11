@@ -14,14 +14,14 @@ int main()
 
     std::vector<circle> circleArray;
     std::vector<line> lineArray;
-    Vector2 initCircle = {1010.f, 500.0f};
+    Vector2 initCircle = {100.f, 500.0f};
     circle c(initCircle, 20);
-    initCircle = {1060.0f, 450.0f};
+    initCircle = {1060.0f, 490.0f};
     circle c2(initCircle, 20);
     circleArray.push_back(c);
     circleArray.push_back(c2);
 
-    /// creating a square
+    /// Creating a square
     line l((Vector2){0, 0}, (Vector2){1600, 0}),
         l2((Vector2){1600, 0}, (Vector2){1600, 900}),
         l3((Vector2){0, 900}, (Vector2){0, 0}),
@@ -39,11 +39,11 @@ int main()
         
         for (int k = 0; k < subStepCounter; k++)
         {
-            for (int i = 0; i < circleArray.size(); i++)
+            for (int i = 0; i < circleArray.size(); i++) /// All circles
             {
-                for (int j = 0; j < lineArray.size(); j++)
+                for (int j = 0; j < lineArray.size(); j++) /// All lines 
                 {
-                    /// circle to line vector, for calculating distance
+                    /// Circle to line vector, for calculating distance
                     Vector2 circleToLine = Vector2Subtract(circleArray[i].getPosition(), lineArray[j].firstPoint);
                     float distance = Vector2DotProduct(circleToLine, lineArray[j].normal);
 
@@ -56,13 +56,20 @@ int main()
                     }
                 }
 
-                if(speedMaximum<abs(circleArray[i].getVelocity().x)||speedMaximum<abs(circleArray[i].getVelocity().y))
+                for(int j=0; j<circleArray.size(); j++)
+                {
+                    if(j!=i){
+                        handleCircleCollision(circleArray[i], circleArray[j]);
+                    }
+                }
+
+                if(speedMaximum<abs(circleArray[i].getVelocity().x)||speedMaximum<abs(circleArray[i].getVelocity().y)) /// Find max speed
                     speedMaximum=__max(abs(circleArray[i].getVelocity().x),abs(circleArray[i].getVelocity().y));
                 
             } 
         }  
         calculateSubSteps(speedMaximum, subStepCounter, subStepMultiplier); /// Update sub steps after every iteration
-        BeginDrawing(); /// start draw
+        BeginDrawing(); /// Start draw
         ClearBackground(BLACK);
         DrawText(message, 390, 400, 50, LIGHTGRAY);
        
@@ -78,7 +85,7 @@ int main()
             finish = lineArray[j].secondPoint;
             DrawLine(start.x, start.y, finish.x, finish.y, BLUE);
         }
-        EndDrawing(); /// stop draw
+        EndDrawing(); /// Stop draw
     }
     CloseWindow();
 

@@ -31,16 +31,24 @@ class circle
 public:
       int subStep;
       circle(Vector2 start, float rad);
+
       Vector2 getPosition();
-      void changePosition(Vector2 vector);
-      int getRadius();
-      void changeRadius(float ammount);
       Vector2 getVelocity();
+      int getRadius();
+      float getWeight();
+
+      void changeRadius(float ammount);
+      void changePosition(Vector2 vector);
       void changeVelocity(Vector2 acceleration);
+
       void setPosition(Vector2 pos);
+      void setVelocity(Vector2 veloc);
+
       void handleCollision(line hitLine, float distance);
       void continueMovement(float stepMultiplier);
+      
 };
 
+void handleCircleCollision(circle& firstCircle, circle& secondCircle);
 void calculateSubSteps(float speed, int& steps, float& multiplier);
 #endif
