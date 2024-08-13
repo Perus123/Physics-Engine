@@ -69,6 +69,10 @@ void handleCircleCollision(circle& firstCircle, circle& secondCircle){
     Vector2 composedFirstVelocity=Vector2Add(Vector2Scale(normal, firstVelocityPrime),Vector2Scale(tangent,firstVelocityTangent)),
             composedSecondVelocity=Vector2Add(Vector2Scale(normal, secondVelocityPrime),Vector2Scale(tangent,secondVelocityTangent));
     /// To add tommorow: redefine Line, penetration, mass
+    float penetration = firstCircle.getRadius()+secondCircle.getRadius()-distance;
+          penetration/=2;
+    firstCircle.changePosition(Vector2Scale(normal, penetration));
+    secondCircle.changePosition(Vector2Scale(normal, -penetration));
     firstCircle.setVelocity(composedFirstVelocity);
     secondCircle.setVelocity(composedSecondVelocity);
     

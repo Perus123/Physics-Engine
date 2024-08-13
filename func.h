@@ -7,8 +7,8 @@
 #include <vector>
 
 /// Physics constants
-const float friction = 1;
-const float restitution = 1;
+const float friction = 0.995;
+const float restitution = 0.9;
 const Vector2 gravity = {0.0f, 60.0f};
 /// Rendering constans
 const float perFrame = 1.0/60;
