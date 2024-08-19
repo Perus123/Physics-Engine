@@ -7,7 +7,7 @@
 #include <vector>
 
 /// Physics constants
-const float friction = 0.995;
+const float friction = 0.999;
 const float restitution = 0.9;
 const Vector2 gravity = {0.0f, 60.0f};
 /// Rendering constans
@@ -48,7 +48,7 @@ public:
       void continueMovement(float stepMultiplier);
       
 };
-
+bool projectionIsOnLine(line Line, Vector2 projection, float projectionScalar);
 void handleCircleCollision(circle& firstCircle, circle& secondCircle);
 void calculateSubSteps(float speed, int& steps, float& multiplier);
 #endif

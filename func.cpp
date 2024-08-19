@@ -37,12 +37,21 @@ void circle::setVelocity(Vector2 veloc){
 void circle::handleCollision(line hitLine, float distance){
 
         Vector2 penetration = Vector2Scale(hitLine.normal, radius - abs(distance));
+        Vector2 normalLine=Vector2Normalize(hitLine.lineDirection);
+        Vector2 circlePositionWithRespectToLine=Vector2Subtract(getPosition(), hitLine.secondPoint);
+        float projectionScalar=Vector2DotProduct(normalLine, circlePositionWithRespectToLine);
+        Vector2 lineProjection=Vector2Scale(normalLine, projectionScalar);
         float value = -2 * Vector2DotProduct(hitLine.normal, velocity) * restitution;
+        std::cout<<projectionScalar<<"\n";
+        std::cout<<lineProjection.x<<" "<<lineProjection.y<<'\n';
+        if(projectionIsOnLine(hitLine, lineProjection, projectionScalar)) {
+
         if (distance < 0)
             penetration=Vector2Scale(penetration,-1);
                         
         changeVelocity(Vector2Scale(hitLine.normal, value));
         changePosition(penetration);
+        }
 }
 float circle::getWeight()
 {
@@ -75,8 +84,6 @@ void handleCircleCollision(circle& firstCircle, circle& secondCircle){
     secondCircle.changePosition(Vector2Scale(normal, -penetration));
     firstCircle.setVelocity(composedFirstVelocity);
     secondCircle.setVelocity(composedSecondVelocity);
-    
-    
 
 }
 
@@ -94,7 +101,11 @@ line::line(Vector2 a, Vector2 b)
     lineVector = {-lineVector.y, lineVector.x};
     normal = Vector2Normalize(lineVector);
 }
-
+bool projectionIsOnLine(line Line, Vector2 projection, float projectionScalar)
+{  
+    float x=Vector2Length(Line.lineDirection);
+    return 0.0<=projectionScalar/x&&projectionScalar/x<=1.0;
+}
 void calculateSubSteps(float speed, int& steps, float& multiplier)
 {
     steps=speed/300+1;
