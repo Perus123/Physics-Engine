@@ -8,8 +8,8 @@ int main()
     InitWindow(screenWidth, screenHeight, "Physics simulator - Gravity");
     char *message = {"Lets get this bread"};
     /// When velocity gets too big, there is a need for sub stepping
-    int subStepCounter=1;
-    float subStepMultiplier=1.0;
+    steps::subStepMultiplier=1.0;
+    steps::subStepCounter=1;
     /// Objects initialization
 
     std::vector<circle> circleArray;
@@ -38,7 +38,7 @@ int main()
         float speedMaximum=0;
        
          fpscounter++;
-        for (int k = 0; k < subStepCounter; k++)
+        for (int k = 0; k < steps::subStepCounter; k++)
         {
             for (int i = 0; i < circleArray.size(); i++) /// All circles
             {
@@ -50,10 +50,10 @@ int main()
 
                     if (abs(distance) <= circleArray[i].getRadius()) {
                         circleArray[i].handleCollision(lineArray[j], distance);
-                        circleArray[i].continueMovement(subStepMultiplier);
+                        circleArray[i].continueMovement();
                     }
                     else {
-                        circleArray[i].continueMovement(subStepMultiplier);
+                        circleArray[i].continueMovement();
                     }
                 }
 
@@ -74,7 +74,7 @@ int main()
             circleArray.push_back(cc);
         }
         
-        calculateSubSteps(speedMaximum, subStepCounter, subStepMultiplier); /// Update sub steps after every iteration
+        calculateSubSteps(speedMaximum, steps::subStepCounter, steps::subStepMultiplier); /// Update sub steps after every iteration
         BeginDrawing(); /// Start draw
         ClearBackground(BLACK);
         DrawText(message, 390, 400, 50, LIGHTGRAY);

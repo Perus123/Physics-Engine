@@ -6,6 +6,11 @@
 #include <raymath.h>
 #include <vector>
 
+
+namespace steps {
+      inline float subStepMultiplier=1.0;
+      inline int subStepCounter=1;
+}
 /// Physics constants
 const float friction = 0.999;
 const float restitution = 0.9;
@@ -45,7 +50,7 @@ public:
       void setVelocity(Vector2 veloc);
 
       void handleCollision(line hitLine, float distance);
-      void continueMovement(float stepMultiplier);
+      void continueMovement();
       
 };
 bool projectionIsOnLine(line Line, Vector2 projection, float projectionScalar);

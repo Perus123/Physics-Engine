@@ -100,12 +100,14 @@ void handleCircleCollision(circle& firstCircle, circle& secondCircle){
     secondCircle.changePosition(Vector2Scale(normal, (-penetration)*(0.55+weightDifferenceModifier-0.9)));
     firstCircle.setVelocity(composedFirstVelocity);
     secondCircle.setVelocity(composedSecondVelocity);
+    firstCircle.continueMovement();
+    secondCircle.continueMovement();
 
 }
 
-void circle::continueMovement(float stepMultiplier){
+void circle::continueMovement(){
     changeVelocity(Vector2Scale(gravity, perFrame));
-    changePosition(Vector2Scale(getVelocity(), perFrame*stepMultiplier));
+    changePosition(Vector2Scale(getVelocity(), perFrame*steps::subStepMultiplier));
 }
 
 line::line(Vector2 a, Vector2 b)
