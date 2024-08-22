@@ -10,7 +10,7 @@
 const float friction = 0.999;
 const float restitution = 0.9;
 const Vector2 gravity = {0.0f, 60.0f};
-/// Rendering constans
+/// Rendering constants
 const float perFrame = 1.0/60;
 
 

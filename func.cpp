@@ -64,17 +64,20 @@ void handleCircleCollision(circle& firstCircle, circle& secondCircle){
         return;
     /// Calculate the line between the two circles
     line firstToSecond(firstCircle.getPosition(), secondCircle.getPosition());
-    /// The normal I calculate in the Line constructor is actually the normal of the tangent
     Vector2 normal = Vector2Normalize(firstToSecond.lineDirection),
             tangent = firstToSecond.normal;  ///Need to rename the Line class because of this
     float firstVelocityTangent=Vector2DotProduct(firstCircle.getVelocity(), tangent),
           firstVelocityNormal=Vector2DotProduct(firstCircle.getVelocity(), normal),
           secondVelocityTangent=Vector2DotProduct(secondCircle.getVelocity(), tangent),
-          secondVelocityNormal=Vector2DotProduct(secondCircle.getVelocity(), normal);
-    float firstVelocityPrime=secondVelocityNormal;
-    float secondVelocityPrime=firstVelocityNormal;
-   
-    /// As we know, the tangential component does not suffer modifications, so we just need to compose the new velocities and assign them.
+          secondVelocityNormal=Vector2DotProduct(secondCircle.getVelocity(), normal),
+          firstMass=firstCircle.getWeight(),
+          secondMass=secondCircle.getWeight();
+
+    ///Calculate new velocities
+    float firstVelocityPrime = (firstVelocityNormal * (firstMass - secondMass) + 2 * secondMass * secondVelocityNormal) / (firstMass + secondMass);
+    float secondVelocityPrime = (secondVelocityNormal * (secondMass-firstMass) + 2 * firstMass * firstVelocityNormal) / (firstMass + secondMass);
+
+    ///The tangential component does not suffer modifications, so we just need to compose the new velocities and assign them.
     Vector2 composedFirstVelocity=Vector2Add(Vector2Scale(normal, firstVelocityPrime),Vector2Scale(tangent,firstVelocityTangent)),
             composedSecondVelocity=Vector2Add(Vector2Scale(normal, secondVelocityPrime),Vector2Scale(tangent,secondVelocityTangent));
     /// To add tommorow: redefine Line, penetration, mass

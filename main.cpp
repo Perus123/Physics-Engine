@@ -25,18 +25,18 @@ int main()
     line l((Vector2){0, 0}, (Vector2){1600, 0}),
         l2((Vector2){1600, 0}, (Vector2){1600, 900}),
         l3((Vector2){0, 900}, (Vector2){0, 0}),
-        l4((Vector2){800, 900}, (Vector2){0, 900});
+        l4((Vector2){1600, 900}, (Vector2){0, 900});
     lineArray.push_back(l);
     lineArray.push_back(l2);
     lineArray.push_back(l3);
     lineArray.push_back(l4);
 
-    SetTargetFPS(30);
+    SetTargetFPS(60);
 
     while (WindowShouldClose() == false)
     {
         float speedMaximum=0;
-        if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
+        
         for (int k = 0; k < subStepCounter; k++)
         {
             for (int i = 0; i < circleArray.size(); i++) /// All circles
@@ -68,7 +68,7 @@ int main()
                 
             } 
         }  
-        }
+        
         calculateSubSteps(speedMaximum, subStepCounter, subStepMultiplier); /// Update sub steps after every iteration
         BeginDrawing(); /// Start draw
         ClearBackground(BLACK);
