@@ -17,7 +17,7 @@ int main()
     Vector2 initCircle = {100.f, 500.0f};
     circle c(initCircle, 20);
     initCircle = {1060.0f, 490.0f};
-    circle c2(initCircle, 20);
+    circle c2(initCircle, 40);
     circleArray.push_back(c);
     circleArray.push_back(c2);
 
@@ -31,12 +31,13 @@ int main()
     lineArray.push_back(l3);
     lineArray.push_back(l4);
 
-    SetTargetFPS(60);
-
+    SetTargetFPS(30);
+    int fpscounter=0;
     while (WindowShouldClose() == false)
     {
         float speedMaximum=0;
-        
+       
+         fpscounter++;
         for (int k = 0; k < subStepCounter; k++)
         {
             for (int i = 0; i < circleArray.size(); i++) /// All circles
@@ -68,6 +69,10 @@ int main()
                 
             } 
         }  
+        if(fpscounter<240&&fpscounter&&fpscounter%10==0){
+            circle  cc(initCircle, fpscounter%60);
+            circleArray.push_back(cc);
+        }
         
         calculateSubSteps(speedMaximum, subStepCounter, subStepMultiplier); /// Update sub steps after every iteration
         BeginDrawing(); /// Start draw
@@ -88,7 +93,7 @@ int main()
         }
         EndDrawing(); /// Stop draw
       
-
+        
     }
     CloseWindow();
 

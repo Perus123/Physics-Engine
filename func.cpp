@@ -21,11 +21,17 @@ void circle::changeRadius(float ammount){
     radius += ammount;
 }
 void circle::changeVelocity(Vector2 acceleration){
-
+    
     velocity.x += acceleration.x;
     velocity.y += acceleration.y;
     velocity.x *= friction;
     velocity.y *= friction;
+    ///If the speed is too slow, there is no point in trying to let friction and restitution getting the objects to be static
+    if(abs(velocity.x)+abs(velocity.y)<1){
+        velocity.x=0;
+        velocity.y=0;
+    }
+        
 }
 void circle::setPosition(Vector2 pos){
     position.x = pos.x;
@@ -42,8 +48,7 @@ void circle::handleCollision(line hitLine, float distance){
         float projectionScalar=Vector2DotProduct(normalLine, circlePositionWithRespectToLine);
         Vector2 lineProjection=Vector2Scale(normalLine, projectionScalar);
         float value = -2 * Vector2DotProduct(hitLine.normal, velocity) * restitution;
-        std::cout<<projectionScalar<<"\n";
-        std::cout<<lineProjection.x<<" "<<lineProjection.y<<'\n';
+        
         if(projectionIsOnLine(hitLine, lineProjection, projectionScalar)) {
 
         if (distance < 0)
@@ -60,7 +65,9 @@ float circle::getWeight()
 void handleCircleCollision(circle& firstCircle, circle& secondCircle){
 
     float distance = Vector2Distance(firstCircle.getPosition(), secondCircle.getPosition());
-    if(distance>firstCircle.getRadius()+secondCircle.getRadius())
+    
+
+    if(distance>=(firstCircle.getRadius()+secondCircle.getRadius()))
         return;
     /// Calculate the line between the two circles
     line firstToSecond(firstCircle.getPosition(), secondCircle.getPosition());
@@ -76,15 +83,21 @@ void handleCircleCollision(circle& firstCircle, circle& secondCircle){
     ///Calculate new velocities
     float firstVelocityPrime = (firstVelocityNormal * (firstMass - secondMass) + 2 * secondMass * secondVelocityNormal) / (firstMass + secondMass);
     float secondVelocityPrime = (secondVelocityNormal * (secondMass-firstMass) + 2 * firstMass * firstVelocityNormal) / (firstMass + secondMass);
+    
+   
+
 
     ///The tangential component does not suffer modifications, so we just need to compose the new velocities and assign them.
     Vector2 composedFirstVelocity=Vector2Add(Vector2Scale(normal, firstVelocityPrime),Vector2Scale(tangent,firstVelocityTangent)),
             composedSecondVelocity=Vector2Add(Vector2Scale(normal, secondVelocityPrime),Vector2Scale(tangent,secondVelocityTangent));
-    /// To add tommorow: redefine Line, penetration, mass
+    /// To add tommorow: redefine Line, mass
+    float weightDifferenceModifier=1.0 - (std::min(firstCircle.getWeight(),secondCircle.getWeight())/std::max(firstCircle.getWeight(),secondCircle.getWeight())/10);
+    std::cout<<weightDifferenceModifier<<"\n";
     float penetration = firstCircle.getRadius()+secondCircle.getRadius()-distance;
-          penetration/=2;
-    firstCircle.changePosition(Vector2Scale(normal, penetration));
-    secondCircle.changePosition(Vector2Scale(normal, -penetration));
+
+       
+    firstCircle.changePosition(Vector2Scale(normal, (penetration)*(0.55+weightDifferenceModifier-0.9)));
+    secondCircle.changePosition(Vector2Scale(normal, (-penetration)*(0.55+weightDifferenceModifier-0.9)));
     firstCircle.setVelocity(composedFirstVelocity);
     secondCircle.setVelocity(composedSecondVelocity);
 
