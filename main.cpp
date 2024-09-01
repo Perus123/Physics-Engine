@@ -31,15 +31,15 @@ int main()
     lineArray.push_back(l3);
     lineArray.push_back(l4);
 
-    SetTargetFPS(30);
+    SetTargetFPS(60);
     int fpscounter=0;
     while (WindowShouldClose() == false)
     {
-        float speedMaximum=0;
        
+         float speedMaximum=0;
          fpscounter++;
         for (int k = 0; k < steps::subStepCounter; k++)
-        {
+        {    
             for (int i = 0; i < circleArray.size(); i++) /// All circles
             {
                 for (int j = 0; j < lineArray.size(); j++) /// All lines 
@@ -63,18 +63,23 @@ int main()
                         handleCircleCollision(circleArray[i], circleArray[j]);
                     }
                 }
-
-                if(speedMaximum<abs(circleArray[i].getVelocity().x)||speedMaximum<abs(circleArray[i].getVelocity().y)) /// Find max speed
-                    speedMaximum=__max(abs(circleArray[i].getVelocity().x),abs(circleArray[i].getVelocity().y));
+                    /// Find max speed  
+                if(speedMaximum<calculateSpeed(circleArray[i].getVelocity()))  
+                        speedMaximum=calculateSpeed(circleArray[i].getVelocity());
+                    
                 
             } 
         }  
-        if(fpscounter<240&&fpscounter&&fpscounter%10==0){
+        if(fpscounter<240&&fpscounter&&fpscounter%10==0&&fpscounter%60){
             circle  cc(initCircle, fpscounter%60);
             circleArray.push_back(cc);
         }
+        std::cout<<steps::subStepCounter<<'\n';
+        calculateSubSteps(speedMaximum);
+       
         
-        calculateSubSteps(speedMaximum, steps::subStepCounter, steps::subStepMultiplier); /// Update sub steps after every iteration
+         /// Update sub steps after every iteration
+        
         BeginDrawing(); /// Start draw
         ClearBackground(BLACK);
         DrawText(message, 390, 400, 50, LIGHTGRAY);

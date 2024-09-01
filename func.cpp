@@ -1,7 +1,6 @@
 #include <func.h>
 
-circle::circle(Vector2 start, float rad)
-{
+circle::circle(Vector2 start, float rad){
     std::cout << "New circle object created at " << start.x << " " << start.y << '\n';
     position.x = start.x;
     position.y = start.y;
@@ -27,7 +26,7 @@ void circle::changeVelocity(Vector2 acceleration){
     velocity.x *= friction;
     velocity.y *= friction;
     ///If the speed is too slow, there is no point in trying to let friction and restitution getting the objects to be static
-    if(abs(velocity.x)+abs(velocity.y)<1){
+    if(abs(velocity.x)+abs(velocity.y)<0.1f){
         velocity.x=0;
         velocity.y=0;
     }
@@ -58,9 +57,12 @@ void circle::handleCollision(line hitLine, float distance){
         changePosition(penetration);
         }
 }
-float circle::getWeight()
-{
+float circle::getWeight(){
     return weight;
+}
+void circle::continueMovement(){
+    changeVelocity(Vector2Scale(gravity, perFrame));
+    changePosition(Vector2Scale(getVelocity(), perFrame*steps::subStepMultiplier));
 }
 void handleCircleCollision(circle& firstCircle, circle& secondCircle){
 
@@ -72,7 +74,7 @@ void handleCircleCollision(circle& firstCircle, circle& secondCircle){
     /// Calculate the line between the two circles
     line firstToSecond(firstCircle.getPosition(), secondCircle.getPosition());
     Vector2 normal = Vector2Normalize(firstToSecond.lineDirection),
-            tangent = firstToSecond.normal;  ///Need to rename the Line class because of this
+            tangent = firstToSecond.normal;  
     float firstVelocityTangent=Vector2DotProduct(firstCircle.getVelocity(), tangent),
           firstVelocityNormal=Vector2DotProduct(firstCircle.getVelocity(), normal),
           secondVelocityTangent=Vector2DotProduct(secondCircle.getVelocity(), tangent),
@@ -84,34 +86,31 @@ void handleCircleCollision(circle& firstCircle, circle& secondCircle){
     float firstVelocityPrime = (firstVelocityNormal * (firstMass - secondMass) + 2 * secondMass * secondVelocityNormal) / (firstMass + secondMass);
     float secondVelocityPrime = (secondVelocityNormal * (secondMass-firstMass) + 2 * firstMass * firstVelocityNormal) / (firstMass + secondMass);
     
-   
-
-
     ///The tangential component does not suffer modifications, so we just need to compose the new velocities and assign them.
     Vector2 composedFirstVelocity=Vector2Add(Vector2Scale(normal, firstVelocityPrime),Vector2Scale(tangent,firstVelocityTangent)),
             composedSecondVelocity=Vector2Add(Vector2Scale(normal, secondVelocityPrime),Vector2Scale(tangent,secondVelocityTangent));
-    /// To add tommorow: redefine Line, mass
-    float weightDifferenceModifier=1.0 - (std::min(firstCircle.getWeight(),secondCircle.getWeight())/std::max(firstCircle.getWeight(),secondCircle.getWeight())/10);
-    std::cout<<weightDifferenceModifier<<"\n";
-    float penetration = firstCircle.getRadius()+secondCircle.getRadius()-distance;
 
-       
-    firstCircle.changePosition(Vector2Scale(normal, (penetration)*(0.55+weightDifferenceModifier-0.9)));
-    secondCircle.changePosition(Vector2Scale(normal, (-penetration)*(0.55+weightDifferenceModifier-0.9)));
+    ///Set a new substep if needed, since objects with big weights ragdoll smaller ones
+    float m1=calculateSpeed(composedFirstVelocity), m2=calculateSpeed(composedSecondVelocity);
+    steps::subStepCounter= std::max(steps::subStepCounter,int (m1/200.0) +1);
+    steps::subStepCounter= std::max(steps::subStepCounter,int (m2/200.0) +1);
+    steps::subStepMultiplier=1.0/steps::subStepCounter;
+
+    ///Solve Penetration
+    float penetration = firstCircle.getRadius()+secondCircle.getRadius()-distance;
+    firstCircle.changePosition(Vector2Scale(normal, penetration));
+    secondCircle.changePosition(Vector2Scale(normal, -penetration));
+
+    ///Update and continue movement
     firstCircle.setVelocity(composedFirstVelocity);
-    secondCircle.setVelocity(composedSecondVelocity);
+    secondCircle.setVelocity(composedSecondVelocity); 
     firstCircle.continueMovement();
     secondCircle.continueMovement();
 
 }
 
-void circle::continueMovement(){
-    changeVelocity(Vector2Scale(gravity, perFrame));
-    changePosition(Vector2Scale(getVelocity(), perFrame*steps::subStepMultiplier));
-}
 
-line::line(Vector2 a, Vector2 b)
-{
+line::line(Vector2 a, Vector2 b){
     firstPoint = a;
     secondPoint = b;
     lineVector = Vector2Subtract(a, b);
@@ -119,13 +118,15 @@ line::line(Vector2 a, Vector2 b)
     lineVector = {-lineVector.y, lineVector.x};
     normal = Vector2Normalize(lineVector);
 }
-bool projectionIsOnLine(line Line, Vector2 projection, float projectionScalar)
-{  
+bool projectionIsOnLine(line Line, Vector2 projection, float projectionScalar){  
     float x=Vector2Length(Line.lineDirection);
     return 0.0<=projectionScalar/x&&projectionScalar/x<=1.0;
 }
-void calculateSubSteps(float speed, int& steps, float& multiplier)
-{
-    steps=speed/300+1;
-    multiplier=1.0/steps;
+void calculateSubSteps(float speed){
+    steps::subStepCounter=speed/200.0 +1;
+    
+    steps::subStepMultiplier=1.0/steps::subStepCounter;
+}
+float calculateSpeed(Vector2 speedComponents){
+        return sqrt(speedComponents.x*speedComponents.x+speedComponents.y*speedComponents.y);
 }

@@ -55,5 +55,6 @@ public:
 };
 bool projectionIsOnLine(line Line, Vector2 projection, float projectionScalar);
 void handleCircleCollision(circle& firstCircle, circle& secondCircle);
-void calculateSubSteps(float speed, int& steps, float& multiplier);
+void calculateSubSteps(float speed);
+float calculateSpeed(Vector2 speedComponents);
 #endif
