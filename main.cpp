@@ -14,12 +14,11 @@ int main()
 
     std::vector<circle> circleArray;
     std::vector<line> lineArray;
-    Vector2 initCircle = {100.f, 500.0f};
+    Vector2 initCircle = {100.f, 100.0f};
     circle c(initCircle, 20);
-    initCircle = {1060.0f, 490.0f};
-    circle c2(initCircle, 40);
+    
     circleArray.push_back(c);
-    circleArray.push_back(c2);
+ 
 
     /// Creating a square
     line l((Vector2){0, 0}, (Vector2){1600, 0}),
@@ -38,7 +37,7 @@ int main()
        
          float speedMaximum=0;
          fpscounter++;
-        for (int k = 0; k < steps::subStepCounter; k++)
+        for (int k = 0; k < steps::subStepCounter*2; k++)
         {    
             for (int i = 0; i < circleArray.size(); i++) /// All circles
             {
@@ -50,11 +49,9 @@ int main()
 
                     if (abs(distance) <= circleArray[i].getRadius()) {
                         circleArray[i].handleCollision(lineArray[j], distance);
-                        circleArray[i].continueMovement();
                     }
-                    else {
-                        circleArray[i].continueMovement();
-                    }
+                    circleArray[i].continueMovement();
+                    
                 }
 
                 for(int j=0; j<circleArray.size(); j++)
@@ -62,6 +59,21 @@ int main()
                     if(j!=i){
                         handleCircleCollision(circleArray[i], circleArray[j]);
                     }
+                   /* for (int it = 0; it < lineArray.size(); it++){
+                    Vector2 circleToLine = Vector2Subtract(circleArray[j].getPosition(), lineArray[it].firstPoint);
+                    float distance = Vector2DotProduct(circleToLine, lineArray[it].normal);
+
+                    if (abs(distance) <= circleArray[j].getRadius()) {
+                        circleArray[j].handleCollision(lineArray[it], distance);
+                    }
+                    Vector2 circleToLine2 = Vector2Subtract(circleArray[i].getPosition(), lineArray[it].firstPoint);
+                    float distance1 = Vector2DotProduct(circleToLine2, lineArray[it].normal);
+
+                    if (abs(distance1) <= circleArray[i].getRadius()) {
+                        circleArray[i].handleCollision(lineArray[it], distance1);
+                    }
+                    }*/
+
                 }
                     /// Find max speed  
                 if(speedMaximum<calculateSpeed(circleArray[i].getVelocity()))  
@@ -70,8 +82,8 @@ int main()
                 
             } 
         }  
-        if(fpscounter<240&&fpscounter&&fpscounter%10==0&&fpscounter%60){
-            circle  cc(initCircle, fpscounter%60);
+        if(fpscounter%5==0){
+            circle  cc(initCircle, 20);
             circleArray.push_back(cc);
         }
         std::cout<<steps::subStepCounter<<'\n';
