@@ -1,11 +1,21 @@
 #include <solver.hpp>
 #include <iostream>
-const int screenHeight=1600;
-const int screenWidth=900;
+const int screenHeight=900;
+const int screenWidth=1600;
+
+VerletObject cir({100.0, 100.0}, 10);
 int main()
 {
-    std::cout<<"D";
-    std::cout<<"PLM";
+    InitWindow(screenWidth, screenHeight, "hey");
+    SetTargetFPS(60);
+    while(!WindowShouldClose())
+    {   
+
+        BeginDrawing();
+        ClearBackground(BLACK);
+        DrawCircleGradient(cir.position.x, cir.position.y, cir.radius, BLUE, WHITE);
+        EndDrawing();
+    }
 
     return 0;
 }

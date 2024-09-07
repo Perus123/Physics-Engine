@@ -3,6 +3,8 @@
 #define solver_HPP
 #include <raylib.h>
 #include <raymath.h>
+#include <vector>
+class Solver;
 class VerletObject
 {
     public: 
@@ -37,11 +39,16 @@ class VerletObject
     }
     void addVelocity(Vector2 v, float dt)
     {
-        last_position=Vector2Add(position,(Vector2Scale(v,-dt)))
+        last_position=Vector2Add(position,(Vector2Scale(v,-dt)));
     }
     
 
 };
-
+class Solver
+{   
+    Solver()=default;
+    std::vector<VerletObject> circ;
+    
+};
 #endif
 
