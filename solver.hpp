@@ -1,6 +1,7 @@
 #pragma once
 #ifndef solver_HPP
 #define solver_HPP
+#include <iostream>
 #include <raylib.h>
 #include <raymath.h>
 #include <vector>
@@ -18,7 +19,7 @@ class VerletObject
         position=position_;
         last_position=position_;
         radius = radius_;
-        acceleration={float(0), float(0)};
+        acceleration={float(0), float(400)};
     }
     void set_acceleration(Vector2 acceleration_)
     {
@@ -45,10 +46,32 @@ class VerletObject
 
 };
 class Solver
-{   
+{   public:
     Solver()=default;
-    std::vector<VerletObject> circ;
+    std::vector<VerletObject> objects;
+
+    void move(VerletObject& obj, float dt)
+    {
+        Vector2 auxiliary_position=obj.position;
+        obj.position=Vector2Add(Vector2Scale(obj.position,2),Vector2Scale(obj.last_position,-1));
+        obj.position=Vector2Add(obj.position, Vector2Scale(obj.acceleration, 1.0/(dt*dt)));
+        std::cout<<obj.position.x<<" "<<obj.position.y<<" se intampla cv\n";
+     
+        obj.last_position=auxiliary_position;
+    }
+    ///void keepBoundary(VerletObject)
     
 };
+
+class boundaryCircle:
+{
+    float x,y,radius;
+    boundaryCircle(float x_, float y_, float radius_)
+    {
+        x=x_;
+        y=y_;
+        radius=radius_;
+    }
+}
 #endif
 
