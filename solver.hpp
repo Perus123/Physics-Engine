@@ -75,9 +75,11 @@ class Solver
         float distance = Vector2Distance(obj.position, container.position);
         if(distance>=container.radius-obj.radius)
         {   
-            Vector2 correction_vector= Vector2Scale(Vector2Subtract(obj.position, container.position) , 1.0/Vector2Length(Vector2Subtract(obj.position, container.position)));
+            Vector2 direction= Vector2Subtract(obj.position, container.position);
+            direction = Vector2Normalize(direction);
+            Vector2 correction_vector=Vector2Scale(direction, container.radius-obj.radius);
             ///obj.last_position=obj.position;
-            obj.position=Vector2Add(container.position, Vector2Scale(correction_vector, container.radius-obj.radius));
+            obj.position=Vector2Add(container.position,correction_vector);
         }
         
     }

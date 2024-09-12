@@ -3,7 +3,7 @@
 const int screenHeight=900;
 const int screenWidth=1600;
 
-VerletObject cir({800.0, 450.0}, 20);
+VerletObject cir({700.0, 500.0}, 20);
 Solver solv;
 boundaryCircle crc ({800,450}, 400);
 
