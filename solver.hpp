@@ -6,6 +6,7 @@
 #include <raymath.h>
 #include <vector>
 class Solver;
+class boundaryCircle;
 class VerletObject
 {
     public: 
@@ -45,6 +46,16 @@ class VerletObject
     
 
 };
+struct boundaryCircle
+{   
+    float radius;
+    Vector2 position;
+    boundaryCircle(Vector2 position_,float radius_)
+    {
+        position=position_;
+        radius=radius_;
+    }
+};
 class Solver
 {   public:
     Solver()=default;
@@ -59,19 +70,20 @@ class Solver
      
         obj.last_position=auxiliary_position;
     }
-    ///void keepBoundary(VerletObject)
+    void keepBoundary(VerletObject& obj, boundaryCircle container)
+    {
+        float distance = Vector2Distance(obj.position, container.position);
+        if(distance>=container.radius-obj.radius)
+        {   
+            Vector2 correction_vector= Vector2Scale(Vector2Subtract(obj.position, container.position) , 1.0/Vector2Length(Vector2Subtract(obj.position, container.position)));
+            ///obj.last_position=obj.position;
+            obj.position=Vector2Add(container.position, Vector2Scale(correction_vector, container.radius-obj.radius));
+        }
+        
+    }
     
 };
 
-class boundaryCircle:
-{
-    float x,y,radius;
-    boundaryCircle(float x_, float y_, float radius_)
-    {
-        x=x_;
-        y=y_;
-        radius=radius_;
-    }
-}
+
 #endif
 

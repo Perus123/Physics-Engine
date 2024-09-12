@@ -5,15 +5,18 @@ const int screenWidth=1600;
 
 VerletObject cir({800.0, 450.0}, 20);
 Solver solv;
+boundaryCircle crc ({800,450}, 400);
 
 int main()
 {
     InitWindow(screenWidth, screenHeight, "hey");
     solv.objects.push_back(cir);
+    
     SetTargetFPS(60);
     while(!WindowShouldClose())
     {   
         solv.move(solv.objects[0],60);
+        solv.keepBoundary(solv.objects[0],crc);
         BeginDrawing();
         ClearBackground(WHITE);
         DrawCircle(screenWidth/2, screenHeight/2, 400, BLACK);
