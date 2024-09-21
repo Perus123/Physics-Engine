@@ -73,7 +73,7 @@ class Solver
     void keepBoundary(VerletObject& obj, boundaryCircle container)
     {
         float distance = Vector2Distance(obj.position, container.position);
-        if(distance>=container.radius-obj.radius)
+        if(distance>=container.radius-obj.radius-0.5f)
         {   
             Vector2 direction= Vector2Subtract(obj.position, container.position);
             direction = Vector2Normalize(direction);
