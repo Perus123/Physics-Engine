@@ -66,8 +66,6 @@ class Solver
         Vector2 auxiliary_position=obj.position;
         obj.position=Vector2Add(Vector2Scale(obj.position,2),Vector2Scale(obj.last_position,-1));
         obj.position=Vector2Add(obj.position, Vector2Scale(obj.acceleration, 1.0/(dt*dt)));
-        std::cout<<obj.position.x<<" "<<obj.position.y<<" se intampla cv\n";
-     
         obj.last_position=auxiliary_position;
     }
     void keepBoundary(VerletObject& obj, boundaryCircle container)
@@ -82,6 +80,18 @@ class Solver
             obj.position=Vector2Add(container.position,correction_vector);
         }
         
+    }
+    void solveCollision(VerletObject& obj1, VerletObject& obj2)
+    {
+        float distance = Vector2Distance(obj1.position, obj2.position);
+        if(distance>=obj1.radius+obj2.radius)
+            return;
+        Vector2 direction = Vector2Subtract(obj1.position, obj2.position);
+        direction=Vector2Normalize(direction);
+        Vector2 correction_vector=Vector2Scale(direction, abs(distance-obj1.radius-obj2.radius));
+        obj1.position=Vector2Add(obj1.position, correction_vector);
+        obj2.position=Vector2Subtract(obj2.position, correction_vector);
+
     }
     
 };
