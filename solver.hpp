@@ -14,6 +14,7 @@ class VerletObject
        Vector2 last_position;
        Vector2 acceleration;
        float radius;
+       Color color;
     VerletObject()=default;
     VerletObject(Vector2 position_, float radius_)
     {
@@ -21,6 +22,7 @@ class VerletObject
         last_position=position_;
         radius = radius_;
         acceleration={float(0), float(400)};
+        color=(Color){255, 0, 0, 255};
     }
     void set_acceleration(Vector2 acceleration_)
     {
@@ -41,7 +43,7 @@ class VerletObject
     }
     void addVelocity(Vector2 v, float dt)
     {
-        last_position=Vector2Add(last_position,(position,(Vector2Scale(v,-dt))));
+        last_position=Vector2Add(last_position,Vector2Add(position,(Vector2Scale(v,-dt))));
     }
     
 
@@ -86,8 +88,8 @@ class Solver
         float distance = Vector2Distance(obj1.position, obj2.position);
         if(distance>=obj1.radius+obj2.radius)
             return;
-        Vector2 direction = Vector2Subtract(obj1.position, obj2.position);
-        /*direction=Vector2Normalize(direction);
+        /*Vector2 direction = Vector2Subtract(obj1.position, obj2.position);
+        direction=Vector2Normalize(direction);
         Vector2 correction_vector=Vector2Scale(direction, abs(distance-obj1.radius-obj2.radius));
         obj1.position=Vector2Add(obj1.position, correction_vector);
         obj2.position=Vector2Subtract(obj2.position, correction_vector);
@@ -95,6 +97,27 @@ class Solver
         be able to make the system loose momentum and reach a state of balance*/
         std::swap(obj1.position, obj1.last_position);
         std::swap(obj2.position, obj2.last_position);
+    }
+    void runSystem(boundaryCircle crc){
+        for(int i=0; i<objects.size();i++){
+            move(objects[i],60);
+            keepBoundary(objects[i], crc);
+        }
+        for(int i=0;i<objects.size();i++)
+            for(int j=0; j<objects.size(); j++)
+                if(i!=j)
+                    solveCollision(objects[i],objects[j]);
+    }
+    void drawSystem(boundaryCircle crc){
+
+        BeginDrawing();
+        ClearBackground(WHITE);
+        DrawCircleSector(crc.position ,crc.radius,0,360,128,BLACK);
+        for(int i=0; i<objects.size();i++)
+            DrawCircle(objects[i].position.x,objects[i].position.y, objects[i].radius, objects[i].color);
+        
+        std::cout<<"se intampla cv"<<'\n';
+        
     }
     
 };
