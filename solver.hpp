@@ -41,7 +41,7 @@ class VerletObject
     }
     void addVelocity(Vector2 v, float dt)
     {
-        last_position=Vector2Add(position,(Vector2Scale(v,-dt)));
+        last_position=Vector2Add(last_position,(position,(Vector2Scale(v,-dt))));
     }
     
 
@@ -87,11 +87,14 @@ class Solver
         if(distance>=obj1.radius+obj2.radius)
             return;
         Vector2 direction = Vector2Subtract(obj1.position, obj2.position);
-        direction=Vector2Normalize(direction);
+        /*direction=Vector2Normalize(direction);
         Vector2 correction_vector=Vector2Scale(direction, abs(distance-obj1.radius-obj2.radius));
         obj1.position=Vector2Add(obj1.position, correction_vector);
         obj2.position=Vector2Subtract(obj2.position, correction_vector);
-
+            It seems that just swapping the positions does a good enough job, by implementing friction i should
+        be able to make the system loose momentum and reach a state of balance*/
+        std::swap(obj1.position, obj1.last_position);
+        std::swap(obj2.position, obj2.last_position);
     }
     
 };
