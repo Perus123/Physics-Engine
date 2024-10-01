@@ -14,16 +14,14 @@ int main()
     InitWindow(screenWidth, screenHeight, "hey");
     solv.objects.push_back(cir);
     solv.objects.push_back(cir2);
-    
+    solv.objects[0].set_velocity((Vector2){1500.0f,0.0f}, 60);
     SetTargetFPS(60);
     const int substeps=8;
     int time=0;
     while(!WindowShouldClose())
     {   
         solv.runSystem(crc, substeps);
-        if(time&&time%60==0)
-            solv.objects.push_back(cir);
-        time++;
+        
 
         
         

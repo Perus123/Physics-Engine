@@ -37,13 +37,13 @@ class VerletObject
         position=position_;
         last_position=position_;
     }
-    void setVelocity(Vector2 v, float dt)
+    void set_velocity(Vector2 v, float dt)
     {
-        last_position=Vector2Add(position,(Vector2Scale(v,-dt)));
+        last_position=Vector2Add(position,(Vector2Scale(v,1.0f/(-dt))));
     }
-    void addVelocity(Vector2 v, float dt)
+    void add_velocity(Vector2 v, float dt)
     {
-        last_position=Vector2Add(last_position,Vector2Add(position,(Vector2Scale(v,-dt))));
+        last_position=Vector2Add(last_position,Vector2Add(position,(Vector2Scale(v,1.0f/(-dt)))));
     }
     
 
@@ -73,7 +73,7 @@ class Solver
     void keepBoundary(VerletObject& obj, boundaryCircle container)
     {
         float distance = Vector2Distance(obj.position, container.position);
-        if(distance>=container.radius-obj.radius)
+        if(distance>=container.radius-obj.radius+0.1f)
         {   
             Vector2 direction= Vector2Subtract(obj.position, container.position);
             direction = Vector2Normalize(direction);
