@@ -16,10 +16,16 @@ int main()
     solv.objects.push_back(cir2);
     
     SetTargetFPS(60);
+    const int substeps=8;
+    int time=0;
     while(!WindowShouldClose())
     {   
-        solv.runSystem(crc);
-        solv.drawSystem(crc);
+        solv.runSystem(crc, substeps);
+        if(time&&time%60==0)
+            solv.objects.push_back(cir);
+        time++;
+
+        
         
         EndDrawing();
     }

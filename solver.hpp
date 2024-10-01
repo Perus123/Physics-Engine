@@ -21,7 +21,7 @@ class VerletObject
         position=position_;
         last_position=position_;
         radius = radius_;
-        acceleration={float(0), float(400)};
+        acceleration={float(0), float(700)};
         color=(Color){255, 0, 0, 255};
     }
     void set_acceleration(Vector2 acceleration_)
@@ -73,7 +73,7 @@ class Solver
     void keepBoundary(VerletObject& obj, boundaryCircle container)
     {
         float distance = Vector2Distance(obj.position, container.position);
-        if(distance>=container.radius-obj.radius-0.5f)
+        if(distance>=container.radius-obj.radius)
         {   
             Vector2 direction= Vector2Subtract(obj.position, container.position);
             direction = Vector2Normalize(direction);
@@ -88,34 +88,34 @@ class Solver
         float distance = Vector2Distance(obj1.position, obj2.position);
         if(distance>=obj1.radius+obj2.radius)
             return;
-        /*Vector2 direction = Vector2Subtract(obj1.position, obj2.position);
+        Vector2 direction = Vector2Subtract(obj1.position, obj2.position);
         direction=Vector2Normalize(direction);
         Vector2 correction_vector=Vector2Scale(direction, abs(distance-obj1.radius-obj2.radius));
         obj1.position=Vector2Add(obj1.position, correction_vector);
         obj2.position=Vector2Subtract(obj2.position, correction_vector);
-            It seems that just swapping the positions does a good enough job, by implementing friction i should
-        be able to make the system loose momentum and reach a state of balance*/
-        std::swap(obj1.position, obj1.last_position);
-        std::swap(obj2.position, obj2.last_position);
+         
+        /*std::swap(obj1.position, obj1.last_position);
+        std::swap(obj2.position, obj2.last_position);*/
     }
-    void runSystem(boundaryCircle crc){
-        for(int i=0; i<objects.size();i++){
-            move(objects[i],60);
-            keepBoundary(objects[i], crc);
+    void runSystem(boundaryCircle crc, const int substeps){
+        for(int subStepCounter=0; subStepCounter<substeps; subStepCounter++){
+            for(int i=0; i<objects.size();i++){
+                move(objects[i],60*substeps);
+                keepBoundary(objects[i], crc);
         }
-        for(int i=0;i<objects.size();i++)
-            for(int j=0; j<objects.size(); j++)
-                if(i!=j)
-                    solveCollision(objects[i],objects[j]);
+            for(int i=0;i<objects.size();i++)
+                for(int j=0; j<objects.size(); j++)
+                    if(i!=j)
+                        solveCollision(objects[i],objects[j]);
+            drawSystem(crc);
+        }
     }
     void drawSystem(boundaryCircle crc){
-
         BeginDrawing();
         ClearBackground(WHITE);
         DrawCircleSector(crc.position ,crc.radius,0,360,128,BLACK);
         for(int i=0; i<objects.size();i++)
             DrawCircle(objects[i].position.x,objects[i].position.y, objects[i].radius, objects[i].color);
-        
         std::cout<<"se intampla cv"<<'\n';
         
     }
